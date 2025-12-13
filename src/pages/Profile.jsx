@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import api from "../lib/api";
 import { useStore } from "../store/useStore";
-import { Edit2, Camera, Grid3X3, MapPin, Link as LinkIcon, Calendar, UserPlus, UserCheck, MoreVertical, Shield, Lock, EyeOff } from "lucide-react";
+import { Edit2, Camera, Grid3X3, MapPin, Link as LinkIcon, Calendar, UserPlus, UserCheck, MoreVertical, Shield, Lock, EyeOff, MessageCircle } from "lucide-react";
 import PostCard from "../components/PostCard";
 import Sidebar from "../components/Sidebar";
 import Modal from "../components/Modal";
@@ -137,6 +137,13 @@ export default function Profile() {
     }
   };
 
+  const startChat = () => {
+    if (!user || !profileUser) return;
+    const ids = [user._id || user.id, profileUser._id].sort();
+    const roomId = `dm-${ids[0]}-${ids[1]}`;
+    navigate(`/rooms/${roomId}`);
+  };
+
   if (!profileUser) return <div className="text-center mt-10">Loading profile...</div>;
 
   return (
@@ -219,6 +226,14 @@ export default function Profile() {
                           <UserPlus size={16} /> Follow
                         </>
                       )}
+                    </button>
+
+                    <button
+                      onClick={startChat}
+                      className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-50 transition shadow-sm flex items-center gap-2"
+                    >
+                      <MessageCircle size={18} />
+                      Message
                     </button>
 
                     {/* More Menu */}
