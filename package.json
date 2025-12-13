@@ -11,8 +11,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.4.2",
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.8",
     "axios": "^1.13.2",
     "emoji-picker-react": "^4.16.1",
     "framer-motion": "^12.23.25",
