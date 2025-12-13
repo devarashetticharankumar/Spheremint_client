@@ -8,6 +8,7 @@ export const useStore = create((set) => ({
   page: 1,
   hasMore: true,
   loading: false,
+  isCheckingAuth: true,
   setUser: (user) => set({ user }),
   setPosts: (posts) => set({ posts }),
   logout: async () => {
@@ -206,22 +207,24 @@ export const useStore = create((set) => ({
     }
   },
   checkAuth: async () => {
+    set({ isCheckingAuth: true });
     try {
-      const res = await api.get("/auth/me");
+      // Race between api request and a 2-second timeout
+      // This safeguards against server hanging or network issues keeping the app in "Loading" forever
+      const authPromise = api.get("/auth/me");
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Auth timeout")), 2000)
+      );
+
+      const res = await Promise.race([authPromise, timeoutPromise]);
       let user = res.data;
-
-      // E2EE logic removed as per user request
-      /*
-      // E2EE: Check/Generate Keys
-      let storedKeys = localStorage.getItem("e2ee_keys");
-      if (!storedKeys) { ... }
-      */
-
       set({ user });
     } catch (err) {
       console.error("Auth check failed:", err);
       set({ user: null });
       localStorage.removeItem("token");
+    } finally {
+      set({ isCheckingAuth: false });
     }
   },
 }));

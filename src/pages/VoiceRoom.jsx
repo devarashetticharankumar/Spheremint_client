@@ -33,7 +33,8 @@ export default function VoiceRoom() {
     }, [roomId]);
 
     useEffect(() => {
-        socketRef.current = io("http://localhost:5001", {
+        const SOCKET_URL = import.meta.env.VITE_APP_API_URL?.replace("/api", "") || "http://localhost:5001";
+        socketRef.current = io(SOCKET_URL, {
             auth: { token: localStorage.getItem("token") },
         });
 

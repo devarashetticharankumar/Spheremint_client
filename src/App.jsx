@@ -30,11 +30,15 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 
 function App() {
-  const { user, checkAuth } = useStore();
+  const { user, checkAuth, isCheckingAuth } = useStore();
 
   useEffect(() => {
     checkAuth();
   }, []);
+
+  if (isCheckingAuth) {
+    return <Loading />;
+  }
 
   return (
     <BrowserRouter>
