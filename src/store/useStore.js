@@ -208,6 +208,13 @@ export const useStore = create((set) => ({
   },
   checkAuth: async () => {
     set({ isCheckingAuth: true });
+    // Check if checking a token is even necessary
+    const token = localStorage.getItem("token");
+    if (!token) {
+      set({ user: null, isCheckingAuth: false });
+      return;
+    }
+
     try {
       // Race between api request and a 2-second timeout
       // This safeguards against server hanging or network issues keeping the app in "Loading" forever
