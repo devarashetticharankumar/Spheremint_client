@@ -213,7 +213,7 @@ export const useStore = create((set) => ({
       // This safeguards against server hanging or network issues keeping the app in "Loading" forever
       const authPromise = api.get("/auth/me");
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Auth timeout")), 2000)
+        setTimeout(() => reject(new Error("Auth timeout")), 30000)
       );
 
       const res = await Promise.race([authPromise, timeoutPromise]);

@@ -126,7 +126,7 @@ export default function Explore() {
                         </div>
 
                         {/* Text */}
-                        <p className="text-gray-800 text-[15px] leading-relaxed mb-4">
+                        <p className="text-gray-800 text-[15px] leading-relaxed mb-4 break-words">
                             {post.text}
                         </p>
 
@@ -200,7 +200,7 @@ export default function Explore() {
                         </div>
 
                         {/* Text */}
-                        <p className="text-gray-800 text-[15px] leading-relaxed mb-4">
+                        <p className="text-gray-800 text-[15px] leading-relaxed mb-4 break-words">
                             {post.text}
                         </p>
 
@@ -331,7 +331,7 @@ export default function Explore() {
             </div>
 
             {/* Content */}
-            <div className="p-4 space-y-6">
+            <div className={activeTab === "map" ? "h-full" : "p-4 space-y-6"}>
                 {renderContent()}
             </div>
         </div>

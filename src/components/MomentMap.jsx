@@ -113,6 +113,7 @@ export default function MomentMap() {
                 minZoom={2}
                 scrollWheelZoom={true}
                 className="h-full w-full outline-none"
+                style={{ height: "100%", width: "100%" }}
             >
                 {/* Dark Theme Map Tiles */}
                 <TileLayer

@@ -22,6 +22,8 @@ const Settings = lazy(() => import("./pages/Settings"));
 const HashtagFeed = lazy(() => import("./pages/HashtagFeed"));
 const VoiceRoom = lazy(() => import("./pages/VoiceRoom"));
 const Sphere3D = lazy(() => import("./pages/Sphere3D"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 
 // Legal & Info Pages
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -49,6 +51,8 @@ function App() {
         <Routes>
           <Route path="/" element={user ? <Home /> : <Login />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route
             path="/profile"
             element={user ? <Profile /> : <Navigate to="/login" />}

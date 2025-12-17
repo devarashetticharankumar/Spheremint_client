@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL || "http://localhost:5001/api",
+  timeout: 60000, // 60s timeout for Render cold starts
 });
 
 api.interceptors.request.use((config) => {

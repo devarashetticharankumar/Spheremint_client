@@ -41,10 +41,13 @@ export default function Sidebar() {
                         <div
                             key={item.label}
                             onClick={() => navigate(item.path)}
-                            className={`nav-item ${isActive ? "active bg-[#0ea5e9] text-white hover:bg-[#0284c7] hover:text-white" : ""}`}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 cursor-pointer ${isActive
+                                ? "bg-[#0ea5e9] text-white shadow-md shadow-blue-500/20"
+                                : "text-gray-600 hover:bg-gray-50 hover:text-[#0ea5e9] hover:pl-5"
+                                }`}
                         >
                             <item.icon size={22} />
-                            <span className="text-lg">{item.label}</span>
+                            <span className="text-base">{item.label}</span>
                         </div>
                     );
                 })}
@@ -76,12 +79,12 @@ export default function Sidebar() {
 
             {/* Footer Links for AdSense/Legal */}
             <div className="mt-8 pt-8 border-t border-gray-100 pb-20">
-                <div className="flex flex-wrap gap-x-4 gap-y-2 px-4 text-xs text-gray-400">
-                    <span onClick={() => navigate("/privacy")} className="hover:underline cursor-pointer">Privacy</span>
-                    <span onClick={() => navigate("/terms")} className="hover:underline cursor-pointer">Terms</span>
-                    <span onClick={() => navigate("/about")} className="hover:underline cursor-pointer">About</span>
-                    <span onClick={() => navigate("/contact")} className="hover:underline cursor-pointer">Contact</span>
-                    <span>© 2024 SphereMint</span>
+                <div className="px-4 text-xs text-gray-400 flex flex-wrap">
+                    <span onClick={() => navigate("/privacy")} className="hover:underline cursor-pointer mr-4 mb-2">Privacy</span>
+                    <span onClick={() => navigate("/terms")} className="hover:underline cursor-pointer mr-4 mb-2">Terms</span>
+                    <span onClick={() => navigate("/about")} className="hover:underline cursor-pointer mr-4 mb-2">About</span>
+                    <span onClick={() => navigate("/contact")} className="hover:underline cursor-pointer mr-4 mb-2">Contact</span>
+                    <span className="mb-2 w-full">© 2024 SphereMint</span>
                 </div>
             </div>
         </div>
