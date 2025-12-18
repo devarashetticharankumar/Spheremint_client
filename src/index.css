@@ -2,29 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b7280;
+    --accent: #2563eb;
+    /* Professional Blue */
+    --border-subtle: #f0f0f0;
+}
+
 body {
-    @apply bg-gray-100 text-gray-900 min-h-screen font-sans;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 @layer components {
     .btn-primary {
-        @apply bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-bold py-2 px-6 rounded-full transition-all duration-200 shadow-sm hover:shadow-md active:scale-95;
+        @apply bg-black hover:bg-gray-800 text-white font-medium py-2 px-6 rounded-full transition-all duration-200 active:scale-95;
     }
 
-    .clean-card {
-        @apply bg-white rounded-xl shadow-sm border border-gray-100;
+    .btn-secondary {
+        @apply bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-2 px-6 rounded-full transition-all duration-200 active:scale-95;
     }
 
-    .clean-input {
-        @apply bg-gray-50 border border-gray-200 rounded-lg p-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all;
+    /* "Zen" Card: No shadow by default, subtle border */
+    .zen-card {
+        @apply bg-white border-b border-[var(--border-subtle)] py-6;
+    }
+
+    .zen-input {
+        @apply bg-gray-50 border-none rounded-xl p-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-200 transition-all font-medium;
     }
 
     .nav-item {
-        @apply flex items-center gap-4 px-4 py-3 text-gray-600 hover:bg-blue-50 hover:text-blue-600 rounded-xl transition-colors font-medium cursor-pointer;
+        @apply flex items-center gap-4 px-6 py-4 text-gray-500 hover:bg-gray-50 hover:text-black rounded-2xl transition-colors font-medium cursor-pointer tracking-wide;
     }
 
     .nav-item.active {
-        @apply bg-blue-50 text-blue-600;
+        @apply text-black font-semibold bg-gray-50;
     }
 
     /* Hide scrollbar for IE, Edge and Firefox */
@@ -42,23 +61,16 @@ body {
     }
 }
 
-/* Custom Leaflet Map Styles */
+/* Leaflet Map Styles - Minimal */
 .leaflet-popup-content-wrapper {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border-radius: 16px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     padding: 0;
-    overflow: hidden;
 }
 
 .leaflet-popup-content {
     margin: 0 !important;
-    width: auto !important;
-}
-
-.leaflet-popup-tip {
-    background: rgba(255, 255, 255, 0.95);
 }
 
 .leaflet-container a.leaflet-popup-close-button {

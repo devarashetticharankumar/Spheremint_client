@@ -55,7 +55,9 @@ export default function ThoughtMatchModal({ matches, onClose, postId }) {
                             key={user._id}
                             className="flex items-center justify-between p-3 rounded-xl border border-gray-100 hover:border-purple-200 hover:bg-purple-50/50 transition group"
                         >
+                            {/* Left Side: Avatar + Text */}
                             <div className="flex items-center gap-3">
+                                {/* Avatar */}
                                 <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
                                     {user.avatar ? (
                                         <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
@@ -65,17 +67,31 @@ export default function ThoughtMatchModal({ matches, onClose, postId }) {
                                         </div>
                                     )}
                                 </div>
+
+                                {/* Text Info */}
                                 <div>
-                                    <h3 className="font-bold text-gray-900 leading-tight">{user.name}</h3>
+                                    <h3 className="font-bold text-gray-900 leading-tight flex items-center gap-2">
+                                        {user.name}
+                                        {user.type === 'echo' && (
+                                            <span className="text-[10px] font-extrabold text-white bg-gradient-to-r from-pink-500 to-rose-500 px-2 py-0.5 rounded-full shadow-sm animate-pulse">
+                                                ECHO {user.similarity}%
+                                            </span>
+                                        )}
+                                    </h3>
                                     <p className="text-xs text-gray-500">@{user.username || "user"}</p>
-                                    {user.matchedTopic && (
-                                        <span className="inline-block mt-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">
-                                            Matched: {user.matchedTopic}
-                                        </span>
-                                    )}
+
+                                    {user.type === 'topic' ? (
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span className="inline-block text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">
+                                                Topic Match
+                                            </span>
+                                            <span className="text-[10px] text-gray-400 font-medium">{user.similarity}% Similar</span>
+                                        </div>
+                                    ) : null}
                                 </div>
                             </div>
 
+                            {/* Right Side: Buttons */}
                             <div className="flex gap-2">
                                 <button
                                     onClick={() => handleInvite(user._id)}
@@ -109,6 +125,6 @@ export default function ThoughtMatchModal({ matches, onClose, postId }) {
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

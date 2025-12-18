@@ -201,7 +201,7 @@ export default function PostCard({ post }) {
 
   return (
     <>
-      <div className="clean-card p-4 mb-4 relative">
+      <div className="zen-card relative hover:bg-gray-50/50 transition-colors duration-500">
         {post.repostOf && (
           <div className="flex items-center gap-2 text-gray-500 text-sm mb-2 ml-1">
             <Repeat size={14} />
@@ -224,7 +224,7 @@ export default function PostCard({ post }) {
           >
             <div className="w-10 h-10 relative flex-shrink-0">
               {/* Primary Author */}
-              <div className={`w-10 h-10 bg-gradient-to-br from-[#0ea5e9] to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden border-2 border-white ${finalPost.collaborators?.length > 0 ? "absolute top-0 left-0 z-10" : ""}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm overflow-hidden ${finalPost.collaborators?.length > 0 ? "absolute top-0 left-0 z-10" : ""} ${!finalPost.user?.avatar ? "bg-black" : ""}`}>
                 {finalPost.anonymous ? (
                   finalPost.maskAvatar ? (
                     <img src={finalPost.maskAvatar} alt="Mask" className="w-full h-full object-cover" />
@@ -631,7 +631,7 @@ export default function PostCard({ post }) {
           </>
         )}
 
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+        <div className="flex items-center justify-between mt-4 pt-2">
           <button
             onClick={(e) => {
               e.stopPropagation();

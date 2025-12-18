@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import api from "../lib/api";
 import { useStore } from "../store/useStore";
-import { Image, Video, X, Send, Smile, BarChart2, MapPin, Palette, Hourglass, Mic, StopCircle } from "lucide-react";
+import { Image, Video, X, Send, Smile, BarChart2, MapPin, Palette, Hourglass, Mic, StopCircle, Wand2 } from "lucide-react";
 
 import toast from "react-hot-toast";
 import MoodSelector, { MOODS } from "./MoodSelector";
 import ThoughtMatchModal from "./ThoughtMatchModal";
 import LinkPreviewCard from "./LinkPreviewCard";
+import { applyVoiceDistortion } from "../utils/audioFilters";
 
 const THEMES = [
   { name: "Default", from: "#ffffff", to: "#ffffff", text: "#1f2937" },
@@ -209,10 +210,26 @@ export default function CreatePost() {
 
   const { loadPosts, user } = useStore();
 
+  const [isDistorted, setIsDistorted] = useState(false);
+
+  const handleVoiceDistortion = async () => {
+    if (!audioBlob) return;
+    const loadingToast = toast.loading("Distorting voice...");
+    try {
+      const distortedBlob = await applyVoiceDistortion(audioBlob);
+      setAudioBlob(distortedBlob);
+      setAudioPreview(URL.createObjectURL(distortedBlob));
+      setIsDistorted(true);
+      toast.success("Voice hidden! 🕵️‍♂️", { id: loadingToast });
+    } catch (err) {
+      toast.error("Failed to distort voice", { id: loadingToast });
+    }
+  };
+
   // Cleanup Audio Preview
   useEffect(() => {
     return () => {
-      if (audioPreview) URL.revokeObjectURL(audioPreview);
+      // if (audioPreview) URL.revokeObjectURL(audioPreview); // React 18 strict mode double invoke fix: Don't revoke immediately or it breaks 
     };
   }, [audioPreview]);
 
@@ -255,6 +272,7 @@ export default function CreatePost() {
   const removeAudio = () => {
     setAudioBlob(null);
     setAudioPreview(null);
+    setIsDistorted(false);
   };
 
   const handleFile = (e) => {
@@ -750,14 +768,33 @@ export default function CreatePost() {
 
       {/* Audio Preview */}
       {audioPreview && !isMultiPost && (
-        <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded-xl flex items-center justify-between animate-fade-in-down">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white">
-              <Mic size={16} />
+        <div className={`mt-3 p-3 border rounded-xl flex flex-wrap items-center justify-between animate-fade-in-down transition-colors gap-2 ${isDistorted ? "bg-gray-900 border-purple-900/50" : "bg-blue-50 border-blue-100"
+          }`}>
+          <div className="flex items-center gap-3">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white transition-all ${isDistorted ? "bg-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.5)]" : "bg-blue-500"
+              }`}>
+              {isDistorted ? <Wand2 size={16} /> : <Mic size={16} />}
             </div>
-            <audio src={audioPreview} controls className="h-8 w-48" />
+            <audio src={audioPreview} controls className="h-8 w-32 sm:w-48" />
+
+            {!isDistorted && (
+              <button
+                onClick={handleVoiceDistortion}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-lg hover:brightness-110 transition shadow-sm"
+                title="Apply Whisper Mode (Deep Voice)"
+              >
+                <Wand2 size={12} />
+                <span className="hidden sm:inline">Whisper Mode 🪄</span>
+              </button>
+            )}
+
+            {isDistorted && (
+              <span className="px-2 py-0.5 bg-purple-500/20 border border-purple-500/50 text-purple-300 text-[10px] font-bold rounded uppercase tracking-wider">
+                Voice Masked
+              </span>
+            )}
           </div>
-          <button onClick={removeAudio} className="text-gray-400 hover:text-red-500 p-1">
+          <button onClick={removeAudio} className={`p-1 transition ${isDistorted ? "text-gray-400 hover:text-white" : "text-gray-400 hover:text-red-500"}`}>
             <X size={18} />
           </button>
         </div>

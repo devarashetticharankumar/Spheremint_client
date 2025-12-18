@@ -53,12 +53,12 @@ export default function Sphere3D() {
     return (
         <div className="w-full h-[calc(100vh-64px)] bg-gray-900 relative">
             {/* Overlay UI */}
-            <div className="absolute top-4 left-4 z-10 text-white">
-                <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">
+            <div className="absolute top-6 left-6 z-10 text-white pointer-events-none">
+                <h1 className="text-4xl font-light tracking-tight text-white mb-2">
                     The Sphere
                 </h1>
-                <p className="text-gray-400 text-sm max-w-xs mt-1">
-                    Spin the globe to discover people across the SphereMint universe. Click a node to visit.
+                <p className="text-gray-400 text-sm font-light max-w-xs leading-relaxed">
+                    Explore the pulse of the world in real-time. Drag to rotate.
                 </p>
             </div>
 

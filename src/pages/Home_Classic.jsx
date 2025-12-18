@@ -22,10 +22,7 @@ export default function Home() {
   const [loadingNearby, setLoadingNearby] = useState(false);
   const [locationError, setLocationError] = useState(null);
 
-  const [globalMood, setGlobalMood] = useState("neutral");
-
   useEffect(() => {
-    // 1. Fetch Posts based on local user mood (existing)
     if (activeTab === "foryou") {
       loadPosts(1, activeMood, "foryou");
     } else if (activeTab === "following") {
@@ -33,36 +30,7 @@ export default function Home() {
     } else if (activeTab === "nearby") {
       fetchNearbyPosts();
     }
-  }, [activeMood, activeTab]);
-
-  // 2. Poll for Global Emotional Weather (New)
-  useEffect(() => {
-    const fetchGlobalMood = async () => {
-      try {
-        const res = await api.get("/posts/mood");
-        if (res.data.mood) setGlobalMood(res.data.mood);
-      } catch (e) {
-        console.error("Failed to fetch emotional weather");
-      }
-    };
-    fetchGlobalMood();
-    const interval = setInterval(fetchGlobalMood, 60000); // Update every minute
-    return () => clearInterval(interval);
-  }, []);
-
-  const getMoodGradient = (mood) => {
-    switch (mood) {
-      case "happy": return "from-yellow-50/50 to-orange-50/50";
-      case "calm": return "from-blue-50/50 to-cyan-50/50";
-      case "motivation": return "from-purple-50/50 to-pink-50/50";
-      case "romantic": return "from-rose-50/50 to-red-50/50";
-      case "funny": return "from-orange-50/50 to-yellow-50/50";
-      case "movies": return "from-indigo-50/50 to-blue-50/50";
-      case "sports": return "from-green-50/50 to-emerald-50/50";
-      case "news": return "from-gray-100/50 to-gray-200/50";
-      default: return "";
-    }
-  };
+  }, [activeMood, activeTab]); // Reload when mood or tab changes
 
   const fetchNearbyPosts = async () => {
     if (!navigator.geolocation) {
@@ -114,7 +82,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-screen bg-[var(--bg-primary)] transition-colors duration-1000 bg-gradient-to-br ${getMoodGradient(globalMood)}`}>
+    <div className="min-h-screen bg-[var(--bg-primary)]">
       <SEO title="Home" />
       <Sidebar />
 
@@ -159,21 +127,6 @@ export default function Home() {
           <div className="mt-6 mb-8">
             <CreatePost />
           </div>
-
-          {/* Global Emotional Weather Indicator */}
-          {globalMood !== 'neutral' && (
-            <div className="mb-4 text-center animate-fade-in-down">
-              <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border bg-white/50 backdrop-blur-sm shadow-sm ${globalMood === 'happy' ? 'text-orange-600 border-orange-200' :
-                  globalMood === 'calm' ? 'text-blue-600 border-blue-200' :
-                    globalMood === 'motivation' ? 'text-purple-600 border-purple-200' :
-                      globalMood === 'romantic' ? 'text-red-600 border-red-200' :
-                        'text-gray-600 border-gray-200'
-                }`}>
-                <Sparkles size={12} />
-                The Sphere is feeling <b>{globalMood.toUpperCase()}</b> right now
-              </span>
-            </div>
-          )}
 
           <div className="space-y-0"> {/* Removed spacing to make it query-feed like */}
             {activeTab === "foryou" || activeTab === "following" ? (
