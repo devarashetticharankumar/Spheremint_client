@@ -3,13 +3,16 @@ import api from "../lib/api";
 import { generateKeys } from "../lib/encryption";
 
 export const useStore = create((set) => ({
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   posts: [],
   page: 1,
   hasMore: true,
   loading: false,
   isCheckingAuth: true,
-  setUser: (user) => set({ user }),
+  setUser: (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    set({ user });
+  },
   setPosts: (posts) => set({ posts }),
   logout: async () => {
     try {
@@ -18,6 +21,7 @@ export const useStore = create((set) => ({
       console.error("Logout failed", err);
     }
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     set({ user: null, posts: [], page: 1, hasMore: true });
     window.location.href = "/login";
   },
@@ -225,11 +229,17 @@ export const useStore = create((set) => ({
 
       const res = await Promise.race([authPromise, timeoutPromise]);
       let user = res.data;
+      localStorage.setItem("user", JSON.stringify(user));
       set({ user });
     } catch (err) {
       console.error("Auth check failed:", err);
-      set({ user: null });
-      localStorage.removeItem("token");
+      // ONLY clear session if explicitly unauthorized (401)
+      // If it's a timeout (500/Network), keep the local data so user isn't logged out
+      if (err.response?.status === 401) {
+        set({ user: null });
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
     } finally {
       set({ isCheckingAuth: false });
     }
